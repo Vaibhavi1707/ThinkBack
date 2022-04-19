@@ -1,0 +1,24 @@
+{
+  "name": "thinkback",
+  "version": "1.0.0",
+  "description": "A notes transcription and summarization tool for hybrid classes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vaibhavi1707/ThinkBack.git"
+  },
+  "author": "Three Layered Perceptron",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Vaibhavi1707/ThinkBack/issues"
+  },
+  "homepage": "https://github.com/Vaibhavi1707/ThinkBack#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "nodemon": "^2.0.15"
+  }
+}
