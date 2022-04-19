@@ -11,4 +11,11 @@ router.post("/register", (req, res) => {
     res.send("Registered student");
 });
 
+router.get("/consolidate", (req, res) => {
+    res.send({
+        "Task1":"Summarize recorded text and consolidate it into different headings",
+        "Task2":"write in a pdf doc and store it in the db"
+    });
+});
+
 module.exports = router;
