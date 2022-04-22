@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const aws = require('aws-sdk');
+const fs = require('fs');
+const PDFDocument = require('pdfkit');
 
 const SUCCESS = 200;
 const SERVER_ERROR = 500;
@@ -23,6 +25,7 @@ router.post("/login", (req, res) => {
     {
         const instiPassword = req.body.instiPassword;
         const instiName = req.body.instiName;
+        const className = req.body.className;
 
         if (!(instiPassword && instiName))
         {
@@ -137,7 +140,6 @@ function addToDB(entities, tableName)
 }
 
 router.post("/register", async (req, res) => {
-    console.log(req);
     try
     {
         // Institute Name + Password: Add institute in Institute table
@@ -226,24 +228,112 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.get("/consolidate", (req, res) => {
-    // Listen to the class and collect text from audio
+function waitForClass(startTime)
+{
+    var currDate = new Date();
+    if (currDate.getHours() + ":" + currDate.getMinutes() === startTime)
+    {
+        return;
+    }
+    else 
+    {
+        setTimeout(waitForClass, 1000);
+    }
+}
 
+router.get("/remind", (req, res) => {
+    var params = {
+        TableName: "Courses",
+        FilterExpression: "course_day = :courseDay and insti_name = :instiName",
+        ExpressionAttributeValues: {
+            ":courseDay": req.body.courseDay,
+            ":instiName": req.body.instiName
+        }
+    };
+    
+    documentClient.scan(params, (err, data) => {
+        if (err)
+        {
+            res.status(SERVER_ERROR).send(err.message);
+        }
+        else
+        {
+            console.log("Classes found", data);
+            var startTime, courseName, endTime;
+            data.Items.forEach(courseObj => {
+                startTime = courseObj.start_time;
+                var startTimeParts = startTime.split(":");
 
-    // Summarise the text 
-    
-    
-    // Arrange it into headings (NLP) 
-    
-    
-    // put it in pdf file
-    
-    
-    // store pdf file in Amazon S3
-    
-    
-    // store the link along with class, course and date details to Notes table    
+                var currTime = new Date()
+                var classTime = new Date()
+                classTime.setHours(parseInt(startTimeParts[0]), 
+                    parseInt(startTimeParts[1]), 0)
 
+                console.log("Current time", currTime.getTime());
+                console.log("Class time", classTime.getTime());
+                console.log(currTime.getTime() < classTime.getTime());
+
+                if (currTime.getTime() <= classTime.getTime()) {
+                    console.log("Found time", courseObj.end_time, courseObj.course_name);
+                    endTime = courseObj.end_time;
+                    courseName = courseObj.course_name;
+                    return;
+                }
+            });
+
+            console.log("Got the course to record", courseName, startTime, endTime);
+
+            waitForClass(startTime);
+
+            console.log("Time for class");
+            res.status(SUCCESS).send({
+                "startTime": startTime,
+                "endTime": endTime,
+                "courseName": courseName
+            });
+        }
+    });
+});
+
+router.get("/upload/:className/:courseName", (req, res) => {
+    var classText = req.body.classText;
+    var className = req.params.className;
+    var courseName = req.params.courseName;
+    console.log("Text of the class material:", classText);
+    // TODO: Section the summary
+
+    var doc = new PDFDocument();
+
+    doc.pipe(fs.createWriteStream('hello.pdf'));
+
+    
+    var pageText = "";
+    doc.fontSize(27)
+        .text(courseName);
+    for (var i = 0; i < classText.length + 1; i ++)
+    {
+        console.log(i);
+        if ((i - 1) % 20 == 0) 
+        {
+            console.log(pageText);
+            doc.addPage()
+            .fontSize(27)
+            .text(pageText)
+            pageText = "";
+        }
+        else 
+        {
+            pageText += classText[i];
+        }
+    }
+
+    doc.end();
+
+    console.log("Doc done: Hello.pdf");
+
+    // TODO: Add to Notes table
+
+    res.status(SUCCESS).send("Notes sucessfully created");
 });
 
 module.exports = router;

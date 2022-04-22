@@ -1,0 +1,54 @@
+{
+    "instiName": "insti9",
+    "instiPassword": "helloworld",
+    "confPassword": "helloworld",
+    "currClassroom": "class1",
+    "studentsCSV": [
+        [
+            "student_id",
+            "institute_name"
+        ],
+        [
+            "STUDT1",
+            "insti9"
+        ],
+        [
+            "STUDT2",
+            "insti9"
+        ],
+        [
+            "STUDT3",
+            "insti9"
+        ]
+    ],
+    "timetableCSV": [
+        [
+            "course_name",
+            "start_time",
+            "end_time",
+            "insti_name",
+            "course_day"
+        ],
+        [
+            "course4",
+            "7:10",
+            "7:11",
+            "insti9",
+            "Monday"
+        ],
+        [
+            "course5",
+            "4:00",
+            "5:00",
+            "insti9",
+            "Tuesday"
+        ],
+        [
+            "course6",
+            "3:00",
+            "4:00",
+            "insti9",
+            "Thursday"
+        ]
+    ]
+}
