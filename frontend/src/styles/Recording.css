@@ -1,0 +1,15 @@
+.recording__image{
+    padding-top: 100px;
+}
+.recording__image>center>img{
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+}
+
+.filesearch__image>center>img{
+    padding-top: 30px;
+    align-items: center;
+    justify-content: center;
+    height: 500px;
+}

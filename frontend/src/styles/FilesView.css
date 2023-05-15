@@ -1,0 +1,38 @@
+.filesView{
+    width: 100%;
+}
+
+.filesView__row1{
+    height: 250px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height:50vh;
+}
+
+.filesView__row2{
+    height: 250px;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.filesView__titles{
+    display: flex;
+    margin-bottom: 5px;
+    color: rgb(85, 78, 78);
+}
+
+.filesView__titles>div>*{
+    margin: 5px;
+}
+
+.filesView__titles--left{
+    flex: 1;
+}
+
+.filesView__titles--right{
+    display: flex;
+}
